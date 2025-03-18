@@ -11,8 +11,8 @@ class PatientSignupPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<PatientSignupPage> {
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  final bool _isPasswordVisible = false;
+  final bool _isConfirmPasswordVisible = false;
   bool _isChecked = false;
 
   @override

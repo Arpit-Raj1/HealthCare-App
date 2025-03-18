@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
-import 'package:swastify/pages/patient_signup_page.dart';
 import 'package:swastify/pages/signup_options.dart';
 
 class LoginPage extends StatefulWidget {
