@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:swastify/components/patient_signup_page.dart';
+import 'package:swastify/pages/patient_signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

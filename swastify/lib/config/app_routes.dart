@@ -1,5 +1,5 @@
-import 'package:swastify/components/login_page.dart';
-import 'package:swastify/components/patient_signup_page.dart';
+import 'package:swastify/pages/login_page.dart';
+import 'package:swastify/pages/patient_signup_page.dart';
 
 class AppRoutes {
   static final pages = {
