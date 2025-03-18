@@ -45,16 +45,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20),
                   // Email Field
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Email",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "Email Address",
+                      labelText: "Email Address",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -62,18 +55,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 15),
                   // Password Field
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Password",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
                   TextField(
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                      hintText: "Create a password",
+                      labelText: "Create a password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
