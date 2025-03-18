@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:swastify/components/app_password_field.dart';
+import 'package:swastify/components/app_text_field.dart';
 
 class PatientSignupPage extends StatefulWidget {
   const PatientSignupPage({super.key});
@@ -43,92 +45,18 @@ class _SignUpPageState extends State<PatientSignupPage> {
                     ),
                     const SizedBox(height: 20),
                     // Name Field
-                    Text(
-                      "Name",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: "Full Name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
+                    AppTextField(hint: 'Name'),
+
                     const SizedBox(height: 15),
-                    // Email Field
-                    Text(
-                      "Email Address",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: "abc@gmail.com",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
+
+                    AppTextField(hint: 'Email Address'),
                     const SizedBox(height: 15),
                     // Password Field
-                    Text(
-                      "Password",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    TextField(
-                      obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: "Create a password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
+                    AppPasswordField(hint: 'Create a password'),
                     const SizedBox(height: 15),
                     // Confirm Password Field
-                    Text(
-                      "Confirm password",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    TextField(
-                      obscureText: !_isConfirmPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: "Re-enter password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isConfirmPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isConfirmPasswordVisible =
-                                  !_isConfirmPasswordVisible;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
+                    AppPasswordField(hint: 'Re-enter password'),
+
                     const SizedBox(height: 15),
                     // Terms and Conditions Checkbox
                     Row(
