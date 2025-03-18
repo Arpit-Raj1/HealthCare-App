@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:swastify/components/patient_signup_page.dart';
+import 'package:swastify/components/app_password_field.dart';
+import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/pages/signup_options.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,8 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isPasswordVisible = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,38 +44,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Email Field
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Email Address",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
+
+                  AppTextField(hint: 'Email'),
+
                   const SizedBox(height: 15),
                   // Password Field
-                  TextField(
-                    obscureText: !_isPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: "Create a password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                  AppPasswordField(hint: 'Password'),
                   const SizedBox(height: 5),
                   // Forgot Password
                   Align(
@@ -114,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => PatientSignupPage(),
+                              builder: (context) => SignupOptions(),
                             ),
                           );
                         },
