@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,13 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 30),
                   // Welcome Text
-                  Text(
-                    "Welcome!",
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text("Welcome!", style: AppText.header1),
                   const SizedBox(height: 20),
 
                   AppTextField(hint: 'Email'),
@@ -55,7 +50,13 @@ class _LoginPageState extends State<LoginPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPasswordPage(),
+                          ),
+                        );
+                      },
                       child: const Text("Forgot password?"),
                     ),
                   ),
@@ -72,10 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () {},
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
+                      child: const Text("Login", style: AppText.buttonText),
                     ),
                   ),
                   const SizedBox(height: 7),
