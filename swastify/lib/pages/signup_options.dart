@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swastify/components/app_signup.dart';
 import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class SignupOptions extends StatefulWidget {
   const SignupOptions({super.key});
@@ -79,10 +80,7 @@ class _SignupOptionsState extends State<SignupOptions> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: const Text("Next", style: AppText.buttonText),
                   ),
                 ),
             ],
