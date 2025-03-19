@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+// import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
-import 'package:swastify/config/app_routes.dart';
-import 'package:swastify/config/app_strings.dart';
-import 'package:swastify/pages/login_page.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -42,127 +39,89 @@ class _AppSignupState extends State<AppSignup> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: KeyboardVisibilityBuilder(
-          builder: (context, isKeyboardVisible) {
-            return Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 50),
+                      Text(
+                        "Sign up as a ${widget.role}",
+                        style: AppText.header1,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "Create an account to get started",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 20),
+                      AppTextField(hint: 'Name'),
+                      const SizedBox(height: 15),
+                      EmailInputField(
+                        labelText: "Email Address",
+                        controller: _emailController,
+                        formKey: _emailFormKey,
+                      ),
+                      const SizedBox(height: 15),
+                      AppPasswordField(hint: 'Create a password'),
+                      const SizedBox(height: 15),
+                      AppPasswordField(hint: 'Re-enter password'),
+                      if (widget.role == "Doctor") ...[
+                        const SizedBox(height: 15),
+                        AppTextField(hint: 'NMC/SMC Registration Number'),
+                      ],
+                      const SizedBox(height: 15),
+                      Row(
                         children: [
-                          SizedBox(height: 50),
-                          Text(
-                            "Sign up as a ${widget.role}",
-                            style: AppText.header1,
+                          Checkbox(
+                            value: _isChecked,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _isChecked = value ?? false;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Create an account to get started",
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                          const SizedBox(height: 20),
-                          AppTextField(hint: 'Name'),
-                          const SizedBox(height: 15),
-                          EmailInputField(
-                            labelText: "Email Address",
-                            controller: _emailController,
-                            formKey: _emailFormKey,
-                          ),
-                          const SizedBox(height: 15),
-                          AppPasswordField(hint: 'Create a password'),
-                          const SizedBox(height: 15),
-                          AppPasswordField(hint: 'Re-enter password'),
-                          if (widget.role == "Doctor") ...[
-                            const SizedBox(height: 15),
-                            AppTextField(hint: 'NMC/SMC Registration Number'),
-                          ],
-                          const SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: _isChecked,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _isChecked = value ?? false;
-                                  });
-                                },
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                children: [
+                                  const TextSpan(
+                                    text: "I've read and agree with the ",
+                                  ),
+                                  TextSpan(
+                                    text: "Terms and Conditions",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF006FFd),
+                                    ),
+                                  ),
+                                  const TextSpan(text: " and the "),
+                                  TextSpan(
+                                    text: "Privacy Policy.",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF006FFd),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(color: Colors.black),
-                                    children: [
-                                      const TextSpan(
-                                        text: "I've read and agree with the ",
-                                      ),
-                                      TextSpan(
-                                        text: "Terms and Conditions",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF006FFd),
-                                        ),
-                                      ),
-                                      const TextSpan(text: " and the "),
-                                      TextSpan(
-                                        text: "Privacy Policy.",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF006FFd),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 40),
-                          AppButton(
-                            onPressed: _validateForm,
-                            hintText: "Sign Up",
-                          ),
-                          if (!isKeyboardVisible) ...[
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Colors.grey[300],
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text("OR"),
-                                ),
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Colors.grey[300],
-                                  ),
-                                ),
-                              ],
                             ),
-                            const SizedBox(height: 20),
-                            ActionWithButton(
-                              fileLoc: "assets/images/google_logo.png",
-                              provider: "Google",
-                              onPressed: () {},
-                              action: "Sign Up",
-                            ),
-                          ],
+                          ),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 40),
+                      AppButton(onPressed: _validateForm, hintText: "Sign Up"),
+                    ],
                   ),
                 ),
-              ],
-            );
-          },
+              ),
+            ),
+          ],
         ),
       ),
     );

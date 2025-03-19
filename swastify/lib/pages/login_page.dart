@@ -4,7 +4,6 @@ import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
-import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
 import 'package:swastify/styles/app_text.dart';
