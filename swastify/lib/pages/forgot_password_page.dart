@@ -35,45 +35,57 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     style: TextStyle(fontSize: 14, color: AppColors.greyText),
                   ),
                   SizedBox(height: 50),
-                  EmailInputField(
-                    labelText: "Email Address",
-                    controller: _emailController,
-                    formKey: _emailFormKey,
-                  ),
-                  SizedBox(height: 40),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: AppColors.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                  Form(
+                    key: _emailFormKey,
+                    child: Column(
+                      children: [
+                        EmailInputField(
+                          labelText: "Email Address",
+                          controller: _emailController,
                         ),
-                      ),
-                      onPressed: () {
-                        if (_emailFormKey.currentState?.validate() ?? false) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Email is valid! Proceeding..."),
-                            ),
-                          );
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ConfirmationPage(),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Invalid email! Please correct it.",
+                        SizedBox(height: 40),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 14),
+                              backgroundColor: AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                          );
-                        }
-                      },
-                      child: Text("Submit", style: AppText.buttonText),
+                            onPressed: () {
+                              if (_emailFormKey.currentState?.validate() ??
+                                  false) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Email is valid! Proceeding...",
+                                    ),
+                                  ),
+                                );
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => ConfirmationPage(
+                                          email: _emailController.text,
+                                        ),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Invalid email! Please correct it.",
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text("Submit", style: AppText.buttonText),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

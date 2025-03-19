@@ -4,7 +4,8 @@ import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class ConfirmationPage extends StatelessWidget {
-  const ConfirmationPage({super.key});
+  final String email;
+  const ConfirmationPage({super.key, required this.email});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class ConfirmationPage extends StatelessWidget {
                       Text("Enter Confirmation Code", style: AppText.header1),
                       SizedBox(height: 8),
                       Text(
-                        "A 4-digit code was sent to a*****ks@gmail.com",
+                        "A 4-digit code was sent to $email",
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.greyText,
@@ -144,6 +145,9 @@ class _OTPInputFieldsState extends State<OTPInputFields> {
 
 void main() {
   runApp(
-    MaterialApp(debugShowCheckedModeBanner: false, home: ConfirmationPage()),
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ConfirmationPage(email: "test@gmail.com"),
+    ),
   );
 }
