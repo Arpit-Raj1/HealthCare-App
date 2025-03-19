@@ -1,0 +1,144 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
+
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key});
+  @override
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _obscureConfirmPassword = !_obscureConfirmPassword;
+    });
+  }
+
+  void _resetPassword() {
+    if (_formKey.currentState!.validate()) {
+      // Handle password reset logic here
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Password reset successfully!")));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 125),
+                Text(
+                  "Reset Password",
+                  style: GoogleFonts.poppins(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 24),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildPasswordField(
+                        _passwordController,
+                        "Enter new password",
+                        _obscurePassword,
+                        _togglePasswordVisibility,
+                      ),
+                      SizedBox(height: 20),
+                      _buildPasswordField(
+                        _confirmPasswordController,
+                        "Re-enter new password",
+                        _obscureConfirmPassword,
+                        _toggleConfirmPasswordVisibility,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: _resetPassword,
+                    child: Text("Confirm", style: AppText.buttonText),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(
+    TextEditingController controller,
+    String labelText,
+    bool obscureText,
+    VoidCallback toggleVisibility,
+  ) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        suffixIcon: IconButton(
+          icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+          onPressed: toggleVisibility,
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please enter a password";
+        }
+        if (controller == _confirmPasswordController &&
+            value != _passwordController.text) {
+          return "Passwords do not match";
+        }
+        if (value.length < 6) {
+          return "Password must be at least 6 characters";
+        }
+        return null;
+      },
+    );
+  }
+}
+
+void main() {
+  runApp(
+    MaterialApp(debugShowCheckedModeBanner: false, home: ResetPasswordPage()),
+  );
+}

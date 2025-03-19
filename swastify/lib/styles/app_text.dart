@@ -8,4 +8,5 @@ class AppText {
   static const subtitle3 = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
   static const body1 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
   static const body2 = TextStyle(fontSize: 14, fontWeight: FontWeight.w400);
+  static const buttonText = TextStyle(fontSize: 18, color: Colors.white);
 }

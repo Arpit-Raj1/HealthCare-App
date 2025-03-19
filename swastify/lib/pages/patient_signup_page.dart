@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class PatientSignupPage extends StatefulWidget {
   const PatientSignupPage({super.key});
@@ -111,10 +112,7 @@ class _SignUpPageState extends State<PatientSignupPage> {
                           ),
                         ),
                         onPressed: () {},
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
+                        child: const Text("Sign Up", style: AppText.buttonText),
                       ),
                     ),
                     const SizedBox(height: 20),
