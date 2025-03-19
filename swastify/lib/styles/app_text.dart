@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppText {
   static var header1 = GoogleFonts.poppins(
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: FontWeight.bold,
   );
-  static const header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.w600);
+  static const header2 = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
   static const subtitle1 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
   static var subtitle2 = GoogleFonts.poppins(
     fontSize: 24,
