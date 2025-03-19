@@ -44,61 +44,63 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          double width = constraints.maxWidth;
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.08),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 100),
-                Text("Reset Password", style: AppText.header1),
-                SizedBox(height: 24),
-                Form(
-                  key: _formKey,
-                  autovalidateMode:
-                      _autoValidate
-                          ? AutovalidateMode.onUserInteraction
-                          : AutovalidateMode.disabled,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildPasswordField(
-                        _passwordController,
-                        "Enter new password",
-                        _obscurePassword,
-                        _togglePasswordVisibility,
-                      ),
-                      SizedBox(height: 20),
-                      _buildPasswordField(
-                        _confirmPasswordController,
-                        "Re-enter new password",
-                        _obscureConfirmPassword,
-                        _toggleConfirmPasswordVisibility,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double width = constraints.maxWidth;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 50),
+                  Text("Reset Password", style: AppText.header1),
+                  SizedBox(height: 24),
+                  Form(
+                    key: _formKey,
+                    autovalidateMode:
+                        _autoValidate
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildPasswordField(
+                          _passwordController,
+                          "Enter new password",
+                          _obscurePassword,
+                          _togglePasswordVisibility,
+                        ),
+                        SizedBox(height: 20),
+                        _buildPasswordField(
+                          _confirmPasswordController,
+                          "Re-enter new password",
+                          _obscureConfirmPassword,
+                          _toggleConfirmPasswordVisibility,
+                        ),
+                      ],
                     ),
-                    onPressed: _resetPassword,
-                    child: Text("Confirm", style: AppText.buttonText),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                  SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: _resetPassword,
+                      child: Text("Confirm", style: AppText.buttonText),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
