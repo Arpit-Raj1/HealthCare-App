@@ -2,6 +2,7 @@ class AppStrings {
   static const appName = 'Swastify';
   static const welcome = 'Welcome!';
   static const login = 'Login ';
+  static const name = "Name";
   static const email = 'Email Address';
   static const password = 'Password';
   static const forgotPassword = 'Forgot password?';
@@ -21,4 +22,16 @@ class AppStrings {
   static const doctor = 'Doctor';
   static const caregiver = 'Caregiver';
   static const searches = 'Searches';
+  static const createAAccountToGetStarted = "Create a Account to get started";
+  static const createAPassword = "Create a Password";
+  static const reEnterPassword = "Re-enter Password";
+  static const nmcSmcRegistrationNumber = "NMC/SMC Registration Number";
+  static const iveReadAndAgreeWithThe = "I've read and agree with the";
+  static const termsAndConditions = "Terms and Conditions";
+  static const and = "and";
+  static const the = "the";
+  static const privacyPolicy = "Privacy Policy";
+  static const google = "Google";
+
+  static const googleLogo = "assets/images/google_logo.png";
 }

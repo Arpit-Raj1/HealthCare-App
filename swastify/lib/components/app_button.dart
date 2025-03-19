@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class AppButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -12,16 +14,13 @@ class AppButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF006FFD),
+          backgroundColor: AppColors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          hintText,
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        child: Text(hintText, style: AppText.buttonText),
       ),
     );
   }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/pages/login_page.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class AppSignup extends StatefulWidget {
   final String role;
@@ -30,33 +33,30 @@ class _AppSignupState extends State<AppSignup> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Sign up as a ${widget.role}",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      "${AppStrings.signup} as a ${widget.role}",
+                      style: AppText.header1,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Create an account to get started",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      AppStrings.createAAccountToGetStarted,
+                      style: AppText.subtitle3,
                     ),
                     const SizedBox(height: 20),
                     // Name Field
-                    AppTextField(hint: 'Name'),
-
+                    AppTextField(hint: AppStrings.name),
                     const SizedBox(height: 15),
-
-                    AppTextField(hint: 'Email Address'),
+                    AppTextField(hint: AppStrings.email),
                     const SizedBox(height: 15),
                     // Password Field
-                    AppPasswordField(hint: 'Create a password'),
+                    AppPasswordField(
+                      hint: AppStrings.createAAccountToGetStarted,
+                    ),
                     const SizedBox(height: 15),
                     // Confirm Password Field
-                    AppPasswordField(hint: 'Re-enter password'),
-                    if (widget.role == "Doctor") ...[
+                    AppPasswordField(hint: AppStrings.reEnterPassword),
+                    if (widget.role == AppStrings.doctor) ...[
                       const SizedBox(height: 15),
-                      AppTextField(hint: 'NMC/SMC Registration Number'),
+                      AppTextField(hint: AppStrings.nmcSmcRegistrationNumber),
                     ],
                     const SizedBox(height: 15),
                     // Terms and Conditions Checkbox
@@ -76,22 +76,19 @@ class _AppSignupState extends State<AppSignup> {
                               style: TextStyle(color: Colors.black),
                               children: [
                                 const TextSpan(
-                                  text: "I've read and agree with the ",
+                                  text:
+                                      ("${AppStrings.iveReadAndAgreeWithThe} "),
                                 ),
                                 TextSpan(
-                                  text: "Terms and Conditions",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF006FFd),
-                                  ),
+                                  text: AppStrings.termsAndConditions,
+                                  style: AppText.primaryText,
                                 ),
-                                const TextSpan(text: " and the "),
+                                const TextSpan(
+                                  text: " ${AppStrings.and} ${AppStrings.the} ",
+                                ),
                                 TextSpan(
-                                  text: "Privacy Policy.",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF006FFd),
-                                  ),
+                                  text: AppStrings.privacyPolicy,
+                                  style: AppText.primaryBoldText,
                                 ),
                               ],
                             ),
@@ -101,7 +98,16 @@ class _AppSignupState extends State<AppSignup> {
                     ),
                     const SizedBox(height: 40),
                     // Sign Up Button
-                    AppButton(onPressed: () {}, hintText: "Sign Up"),
+                    AppButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          AppRoutes.login,
+                          (route) => false,
+                        );
+                      },
+                      hintText: AppStrings.signup,
+                    ),
                     const SizedBox(height: 20),
                     // OR Divider
                     Row(
@@ -122,10 +128,10 @@ class _AppSignupState extends State<AppSignup> {
                     const SizedBox(height: 20),
                     // Google Sign Up Button
                     ActionWithButton(
-                      fileLoc: "assets/images/google_logo.png",
-                      provider: "Google",
+                      fileLoc: AppStrings.googleLogo,
+                      provider: AppStrings.google,
                       onPressed: () {},
-                      action: "Sign Up",
+                      action: AppStrings.signup,
                     ),
                   ],
                 ),

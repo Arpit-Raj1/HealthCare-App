@@ -11,56 +11,58 @@ class ConfirmationPage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           // double width = constraints.maxWidth;
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 100),
-                Text("Enter Confirmation Code", style: AppText.header1),
-                SizedBox(height: 8),
-                Text(
-                  "A 4-digit code was sent to a*****ks@gmail.com",
-                  style: TextStyle(fontSize: 14, color: AppColors.greyText),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 24),
-                OTPInputFields(),
-                SizedBox(height: 50),
-                TextButton(
-                  onPressed: () {
-                    // Resend code action
-                  },
-                  child: Center(
-                    child: Text(
-                      "Resend code",
-                      style: TextStyle(color: AppColors.primary),
-                    ),
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 100),
+                  Text("Enter Confirmation Code", style: AppText.header1),
+                  SizedBox(height: 8),
+                  Text(
+                    "A 4-digit code was sent to a*****ks@gmail.com",
+                    style: TextStyle(fontSize: 14, color: AppColors.greyText),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  SizedBox(height: 24),
+                  OTPInputFields(),
+                  SizedBox(height: 50),
+                  TextButton(
+                    onPressed: () {
+                      // Resend code action
+                    },
+                    child: Center(
+                      child: Text(
+                        "Resend code",
+                        style: TextStyle(color: AppColors.primary),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ResetPasswordPage(),
-                        ),
-                      );
-                    },
-                    child: Text("Continue", style: AppText.buttonText),
                   ),
-                ),
-              ],
+                  SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ResetPasswordPage(),
+                          ),
+                        );
+                      },
+                      child: Text("Continue", style: AppText.buttonText),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
