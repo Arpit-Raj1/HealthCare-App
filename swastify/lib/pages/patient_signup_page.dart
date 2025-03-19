@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
 import 'package:swastify/styles/app_text.dart';
@@ -29,20 +28,11 @@ class _SignUpPageState extends State<PatientSignupPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Sign up as a Patient",
-                      style: GoogleFonts.poppins(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text("Sign up as a Patient", style: AppText.header1),
                     const SizedBox(height: 5),
                     Text(
                       "Create an account to get started",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                      style: AppText.subtitle2,
                     ),
                     const SizedBox(height: 20),
                     // Name Field
@@ -73,7 +63,7 @@ class _SignUpPageState extends State<PatientSignupPage> {
                         Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style: GoogleFonts.poppins(color: Colors.black),
+                              style: AppText.normalText,
                               children: [
                                 const TextSpan(
                                   text: "I've read and agree with the ",

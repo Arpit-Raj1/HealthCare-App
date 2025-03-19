@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/pages/reset_password_page.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
@@ -11,19 +10,15 @@ class ConfirmationPage extends StatelessWidget {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double width = constraints.maxWidth;
+          // double width = constraints.maxWidth;
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Enter Confirmation Code",
-                  style: GoogleFonts.poppins(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                SizedBox(height: 100),
+                Text("Enter Confirmation Code", style: AppText.header1),
                 SizedBox(height: 8),
                 Text(
                   "A 4-digit code was sent to a*****ks@gmail.com",
@@ -37,9 +32,11 @@ class ConfirmationPage extends StatelessWidget {
                   onPressed: () {
                     // Resend code action
                   },
-                  child: Text(
-                    "Resend code",
-                    style: TextStyle(color: AppColors.primary),
+                  child: Center(
+                    child: Text(
+                      "Resend code",
+                      style: TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),

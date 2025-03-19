@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -16,6 +15,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _autoValidate = false;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -30,8 +30,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void _resetPassword() {
+    setState(() {
+      _autoValidate = true;
+    });
+
     if (_formKey.currentState!.validate()) {
-      // Handle password reset logic here
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Password reset successfully!")));
@@ -49,17 +52,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 125),
-                Text(
-                  "Reset Password",
-                  style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                SizedBox(height: 100),
+                Text("Reset Password", style: AppText.header1),
                 SizedBox(height: 24),
                 Form(
                   key: _formKey,
+                  autovalidateMode:
+                      _autoValidate
+                          ? AutovalidateMode.onUserInteraction
+                          : AutovalidateMode.disabled,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -138,7 +139,5 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 }
 
 void main() {
-  runApp(
-    MaterialApp(debugShowCheckedModeBanner: false, home: ResetPasswordPage()),
-  );
+  runApp(MaterialApp(home: ResetPasswordPage()));
 }

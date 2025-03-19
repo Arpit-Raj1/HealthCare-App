@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:swastify/pages/confirmation_page.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
@@ -18,14 +17,8 @@ class ForgotPasswordPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 125),
-                Text(
-                  "Forgot Password",
-                  style: GoogleFonts.poppins(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                SizedBox(height: 100),
+                Text("Forgot Password", style: AppText.header1),
                 SizedBox(height: 8),
                 Text(
                   "Enter email ID to reset your password",
