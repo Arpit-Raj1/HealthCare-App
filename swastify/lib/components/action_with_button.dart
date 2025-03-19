@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 class ActionWithButton extends StatelessWidget {
   final String action;
@@ -21,17 +23,17 @@ class ActionWithButton extends StatelessWidget {
         height: 40,
         child: OutlinedButton.icon(
           style: OutlinedButton.styleFrom(
-            backgroundColor: const Color(0xFFF2F2F2),
+            backgroundColor: AppColors.actionBackround,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
             ),
-            side: const BorderSide(color: Colors.white),
+            side: const BorderSide(color: AppColors.white),
           ),
           icon: Image.asset(fileLoc, height: 24),
           onPressed: onPressed,
           label: Text(
             "$action with $provider",
-            style: TextStyle(fontSize: 16, color: Colors.black),
+            style: AppText.actionButtonText,
           ),
         ),
       ),

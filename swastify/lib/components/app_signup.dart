@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
-import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/pages/login_page.dart';
+import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class AppSignup extends StatefulWidget {
