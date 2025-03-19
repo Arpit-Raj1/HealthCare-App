@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/components/app_signup.dart';
+import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -66,6 +68,11 @@ class _SignupOptionsState extends State<SignupOptions> {
                   child: ElevatedButton(
                     onPressed: () {
                       // Navigate or Perform Action
+                      Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.signup,
+                        arguments: {'role': selectedRole},
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,

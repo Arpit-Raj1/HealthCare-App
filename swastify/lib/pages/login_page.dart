@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
-import 'package:swastify/pages/forgot_password_page.dart';
+import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/pages/signup_options.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -29,9 +32,13 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 50),
                   // Illustration Image
                   SizedBox(
-                    height: constraints.maxWidth > 600 ? 350 : 250,
-                    child: Image.asset(
-                      'assets/images/app_logo.png',
+                    height: (constraints.maxWidth > 600) ? 350 : 250,
+                    // child: Image.asset(
+                    //   'assets/images/app_logo.png',
+                    //   fit: BoxFit.contain,
+                    // ),
+                    child: SvgPicture.asset(
+                      "assets/svg/app_logo.svg",
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -60,22 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text("Forgot password?"),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   // Login Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF006FFD),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: const Text("Login", style: AppText.buttonText),
-                    ),
-                  ),
+                  AppButton(onPressed: () {}, hintText: "Login"),
                   const SizedBox(height: 7),
                   // Sign Up Link
                   Row(
@@ -98,15 +92,27 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  const Text("Or continue with"),
-                  const SizedBox(height: 5),
-                  // Google Login Button
-                  IconButton(
-                    icon: Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 40,
-                    ),
+                  // const Text("Or continue with"),
+                  // const SizedBox(height: 5),
+                  // // Google Login Button
+                  // IconButton(
+                  //   icon: Image.asset(
+                  //     'assets/images/google_logo.png',
+                  //     height: 40,
+                  //   ),
+                  //   // icon: SvgPicture.asset(
+                  //   //   "assets/svg/google_icon.svg",
+                  //   //   height: 40,
+                  //   //   width: 40,
+                  //   //   fit: BoxFit.contain,
+                  //   // ),
+                  //   onPressed: () {},
+                  // ),
+                  ActionWithButton(
+                    fileLoc: "assets/images/google_logo.png",
+                    provider: "Google",
                     onPressed: () {},
+                    action: "Login",
                   ),
                 ],
               ),

@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       initialRoute: AppRoutes.login,
-      routes: AppRoutes.pages,
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }
