@@ -7,4 +7,7 @@ class AppColors {
   static const greyText = Colors.grey;
   static const actionBackround = Color(0xFFF2F2F2);
   static const actionButtomBackground = Colors.white;
+  static const background = Color(0xffffffff);
+  static const buttonText = Colors.white;
+  // static const userCardSideBar = Colors.black;
 }

@@ -22,6 +22,7 @@ class AppStrings {
   static const doctor = 'Doctor';
   static const caregiver = 'Caregiver';
   static const searches = 'Searches';
+  static const search = 'Search';
   static const createAAccountToGetStarted = "Create a Account to get started";
   static const createAPassword = "Create a Password";
   static const reEnterPassword = "Re-enter Password";
@@ -32,6 +33,9 @@ class AppStrings {
   static const the = "the";
   static const privacyPolicy = "Privacy Policy";
   static const google = "Google";
-
   static const googleLogo = "assets/images/google_logo.png";
+  static const profilePic = "assets/images/profile.png";
+  static const changePicture = "Change Picture";
+  static const phoneNumber = "Phone Number";
+  static const logout = "Log Out";
 }

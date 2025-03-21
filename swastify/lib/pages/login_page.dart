@@ -4,6 +4,7 @@ import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
+import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
 import 'package:swastify/styles/app_text.dart';
@@ -25,10 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   void _validateForm() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, proceed with login
-      print("Form is valid");
-    } else {
-      print("Form is not valid");
-    }
+      Navigator.of(context).pushReplacementNamed(AppRoutes.medicineAlerts);
+    } else {}
   }
 
   @override
