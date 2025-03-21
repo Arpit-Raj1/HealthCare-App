@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String   @id @default(uuid()) @db.Uuid
+  name                String
+  email               String   @unique
+  password            String
+  phoneNumber         String   @unique
+  profilePicture      String?
+  dob                 DateTime
+  address             String?
+  Role                Role
+  dateOfRegistration  DateTime
+  registrationNumber  String
+  stateMedicalCouncil String
+  qualification       String
+  qualificationYear   String
+  university          String
+
+  accountCreatedAt         DateTime  @default(now())
+  accountUpdatedAt         DateTime? @updatedAt
+  passwordChangedAt        DateTime?
+  passwordResetToken       String?
+  passwordResetTokenExpiry DateTime?
+
+  messagesSent     Message[] @relation("Sender")
+  messagesReceived Message[] @relation("Receiver")
+}
+
+enum Role {
+  PATIENT
+  CAREGIVER
+  DOCTOR
+}
+
+model Message {
+  id         String @id @default(uuid())
+  content    String
+  sender     User   @relation("Sender", fields: [senderId], references: [id])
+  senderId   String
+  receiver   User   @relation("Receiver", fields: [receiverId], references: [id])
+  receiverId String
+
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+}
