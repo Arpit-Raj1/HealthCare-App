@@ -3,6 +3,7 @@ import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
+import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class AppSignup extends StatefulWidget {
@@ -20,16 +21,59 @@ class _AppSignupState extends State<AppSignup> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _nmcController = TextEditingController();
+  final TextEditingController _stateMedicalCouncilController =
+      TextEditingController();
+  final TextEditingController _yearOfRegistrationController =
+      TextEditingController();
 
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Single Form Key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isChecked = false;
+
+  final List<String> _stateMedicalCouncils = [
+    "Andhra Pradesh Medical Council",
+    "Assam Medical Council",
+    "Bihar Medical Council",
+    "Chhattisgarh Medical Council",
+    "Delhi Medical Council",
+    "Goa Medical Council",
+    "Gujarat Medical Council",
+    "Haryana Medical Council",
+    "Himachal Pradesh Medical Council",
+    "Jharkhand Medical Council",
+    "Karnataka Medical Council",
+    "Kerala Medical Council",
+    "Madhya Pradesh Medical Council",
+    "Maharashtra Medical Council",
+    "Manipur Medical Council",
+    "Meghalaya Medical Council",
+    "Mizoram Medical Council",
+    "Nagaland Medical Council",
+    "Odisha Medical Council",
+    "Punjab Medical Council",
+    "Rajasthan Medical Council",
+    "Sikkim Medical Council",
+    "Tamil Nadu Medical Council",
+    "Telangana Medical Council",
+    "Tripura Medical Council",
+    "Uttar Pradesh Medical Council",
+    "Uttarakhand Medical Council",
+    "West Bengal Medical Council",
+  ];
+
+  final List<String> _years = List.generate(
+    DateTime.now().year - 1950 + 1,
+    (index) => (1950 + index).toString(),
+  );
 
   void _validateForm() {
     if (_formKey.currentState?.validate() ?? false) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Form is valid! Proceeding...")),
+      );
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.login,
+        (Route<dynamic> route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -64,6 +108,56 @@ class _AppSignupState extends State<AppSignup> {
     return null;
   }
 
+  Widget _buildDropdownField({
+    required String hintText,
+    required TextEditingController controller,
+    required List<String> options,
+  }) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return options;
+        }
+        return options
+            .where(
+              (option) => option.toLowerCase().contains(
+                textEditingValue.text.toLowerCase(),
+              ),
+            )
+            .toList();
+      },
+      onSelected: (String selection) {
+        controller.text = selection;
+      },
+      fieldViewBuilder: (
+        context,
+        textEditingController,
+        focusNode,
+        onFieldSubmitted,
+      ) {
+        controller.text = textEditingController.text;
+        return TextFormField(
+          controller: textEditingController,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            labelText: hintText,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            filled: true,
+            fillColor: Colors.grey[200],
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please select a $hintText";
+            }
+            return null;
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +165,7 @@ class _AppSignupState extends State<AppSignup> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(
-            key: _formKey, // Wrap all fields in a single Form
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -106,9 +200,21 @@ class _AppSignupState extends State<AppSignup> {
                 if (widget.role == "Doctor") ...[
                   const SizedBox(height: 15),
                   AppTextField(
-                    hint: 'NMC/SMC Registration Number',
+                    hint: 'Registration Number',
                     controller: _nmcController,
                     validator: nmcValidator,
+                  ),
+                  const SizedBox(height: 15),
+                  _buildDropdownField(
+                    hintText: 'State Medical Council',
+                    controller: _stateMedicalCouncilController,
+                    options: _stateMedicalCouncils,
+                  ),
+                  const SizedBox(height: 15),
+                  _buildDropdownField(
+                    hintText: 'Year of Registration',
+                    controller: _yearOfRegistrationController,
+                    options: _years,
                   ),
                 ],
                 const SizedBox(height: 15),

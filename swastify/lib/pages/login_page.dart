@@ -26,10 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   void _validateForm() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, proceed with login
-      Navigator.of(context).pushReplacementNamed(AppRoutes.emergency);
-    } else {
-      print("Form is not valid");
-    }
+      Navigator.of(context).pushReplacementNamed(AppRoutes.medicineAlerts);
+    } else {}
   }
 
   @override
