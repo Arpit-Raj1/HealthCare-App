@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/pages/login_page.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -38,6 +39,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Password reset successfully!")));
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (route) => false, // This removes all previous routes from the stack
+      );
     }
   }
 
