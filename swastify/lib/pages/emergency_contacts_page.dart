@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/components/app_bar.dart';
+import 'package:swastify/components/search_bar.dart';
+import 'package:swastify/components/sidebar.dart';
+import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 enum ProfileMenu { call, edit, delete }
 
 class EmergencyContactsScreen extends StatefulWidget {
+  const EmergencyContactsScreen({super.key});
+
   @override
   _EmergencyContactsScreenState createState() =>
       _EmergencyContactsScreenState();
@@ -14,7 +22,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
     (index) => {"name": "Aditya Aryan", "phone": "+91 7979737747"},
   );
   List<Map<String, String>> filteredContacts = [];
-  Set<int> selectedIndexes = {}; // Stores selected items
+  Set<int> selectedIndexes = {};
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -168,9 +176,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                       "name": nameController.text,
                       "phone": "+91 ${phoneController.text}",
                     };
-                    filteredContacts = List.from(
-                      contacts,
-                    ); // Update the filtered list
+                    filteredContacts = List.from(contacts);
                   });
                   Navigator.pop(context);
                 }
@@ -186,16 +192,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text( 
-          selectedIndexes.isNotEmpty
-              ? "${selectedIndexes.length} Selected"
-              : "Emergency Contacts",
-        ),
-        leading:
-            selectedIndexes.isEmpty
-                ? IconButton(icon: Icon(Icons.menu), onPressed: () {})
-                : null, // Remove leading when selection is active
+      appBar: Appbar(
+        title:
+            selectedIndexes.isNotEmpty
+                ? "${selectedIndexes.length} Selected"
+                : "Emergency Contacts",
         actions:
             selectedIndexes.isNotEmpty
                 ? [
@@ -206,6 +207,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                 ]
                 : [],
       ),
+      drawer: SideBar(selectedIndex: 5),
 
       body: GestureDetector(
         onTap: () {
@@ -215,92 +217,98 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             });
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "Search",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+        child: Column(
+          children: [
+            CustomSearchBar(controller: searchController),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextField(
+            //     controller: searchController,
+            //     decoration: InputDecoration(
+            //       prefixIcon: Icon(Icons.search),
+            //       hintText: "Search",
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(10),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredContacts.length,
+                itemBuilder: (context, index) {
+                  final isSelected = selectedIndexes.contains(index);
+                  return ListTile(
+                    onLongPress: () => _toggleSelection(index),
+                    onTap: () {
+                      if (selectedIndexes.isNotEmpty) {
+                        _toggleSelection(index);
+                      }
+                    },
+                    tileColor: isSelected ? Colors.blue.shade100 : null,
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.blue.shade100,
+                      child: Icon(Icons.person, color: AppColors.primary),
                     ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: filteredContacts.length,
-                  itemBuilder: (context, index) {
-                    final isSelected = selectedIndexes.contains(index);
-                    return ListTile(
-                      onLongPress: () => _toggleSelection(index),
-                      onTap: () {
-                        if (selectedIndexes.isNotEmpty) {
-                          _toggleSelection(index);
+                    title: Text(
+                      filteredContacts[index]['name']!,
+                      style: AppText.header2.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    subtitle: Text(
+                      filteredContacts[index]['phone']!,
+                      style: AppText.body2,
+                    ),
+                    trailing: PopupMenuButton<ProfileMenu>(
+                      onSelected: (value) {
+                        switch (value) {
+                          case ProfileMenu.edit:
+                            int actualIndex = contacts.indexWhere(
+                              (contact) =>
+                                  contact["phone"] ==
+                                  filteredContacts[index]["phone"],
+                            );
+                            if (actualIndex != -1) {
+                              _showEditContactPopup(context, actualIndex);
+                            }
+                            break;
+                          case ProfileMenu.call:
+                            break;
+                          case ProfileMenu.delete:
+                            setState(() {
+                              contacts.removeAt(index);
+                              filteredContacts = List.from(contacts);
+                            });
+                            break;
                         }
                       },
-                      tileColor: isSelected ? Colors.blue.shade100 : null,
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.blue.shade100,
-                        child: Icon(Icons.person, color: Colors.blue),
-                      ),
-                      title: Text(filteredContacts[index]['name']!),
-                      subtitle: Text(filteredContacts[index]['phone']!),
-                      trailing: PopupMenuButton<ProfileMenu>(
-                        onSelected: (value) {
-                          switch (value) {
-                            case ProfileMenu.edit:
-                              int actualIndex = contacts.indexWhere(
-                                (contact) =>
-                                    contact["phone"] ==
-                                    filteredContacts[index]["phone"],
-                              );
-                              if (actualIndex != -1) {
-                                _showEditContactPopup(context, actualIndex);
-                              }
-                              break;
-                            case ProfileMenu.call:
-                              break;
-                            case ProfileMenu.delete:
-                              setState(() {
-                                contacts.removeAt(index);
-                                filteredContacts = List.from(contacts);
-                              });
-                              break;
-                          }
-                        },
 
-                        icon: const Icon(Icons.more_vert_rounded),
-                        itemBuilder: (context) {
-                          return [
-                            const PopupMenuItem(
-                              value: ProfileMenu.edit,
-                              child: Text("Edit"),
-                            ),
-                            const PopupMenuItem(
-                              value: ProfileMenu.delete,
-                              child: Text("Delete"),
-                            ),
-                          ];
-                        },
-                      ),
-                    );
-                  },
-                ),
+                      icon: const Icon(Icons.more_vert_rounded),
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem(
+                            value: ProfileMenu.edit,
+                            child: Text(AppStrings.edit),
+                          ),
+                          const PopupMenuItem(
+                            value: ProfileMenu.delete,
+                            child: Text("Delete"),
+                          ),
+                        ];
+                      },
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddContactPopup(context),
+        backgroundColor: const Color.fromARGB(255, 130, 184, 255),
         child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
       ),
     );
   }

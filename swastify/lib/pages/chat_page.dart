@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/components/app_bar.dart';
-import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/components/sidebar.dart';
+import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 void main() {
   runApp(MyApp());
@@ -106,7 +107,8 @@ class MessageTile extends StatelessWidget {
   final String message;
   final int unreadMessages;
 
-  MessageTile({
+  const MessageTile({
+    super.key,
     required this.name,
     required this.message,
     this.unreadMessages = 0,
@@ -119,8 +121,11 @@ class MessageTile extends StatelessWidget {
         backgroundColor: Colors.blue[100],
         child: Icon(Icons.person, color: AppColors.primary),
       ),
-      title: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(message),
+      title: Text(
+        name,
+        style: AppText.header2.copyWith(fontWeight: FontWeight.w500),
+      ),
+      subtitle: Text(message, style: AppText.body2),
       trailing:
           unreadMessages > 0
               ? CircleAvatar(
