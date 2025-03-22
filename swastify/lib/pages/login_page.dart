@@ -1,13 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
+import 'package:swastify/provider/login_provider.dart';
+import 'package:swastify/services/auth_service.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,6 +33,16 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setBool('loggedIn', true); // Set user as logged in
       Navigator.of(context).pushReplacementNamed(AppRoutes.medicineAlerts);
     }
+  }
+
+  Future<void> submitLogin() async {
+    _validateForm();
+    await signInWithEmailPassword(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    print("Signed in");
   }
 
   @override
@@ -84,13 +99,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-
+                      // Calls _validateForm()
                       AppButton(
-                        onPressed: _validateForm,
+                        onPressed: () async {
+                          await submitLogin();
+                        },
                         hintText: "Login",
-                      ), // Calls _validateForm()
+                      ),
                       const SizedBox(height: 7),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -115,7 +131,47 @@ class _LoginPageState extends State<LoginPage> {
                       ActionWithButton(
                         fileLoc: "assets/images/google_logo.png",
                         provider: "Google",
-                        onPressed: () {},
+                        onPressed: () async {
+                          // print("Google");
+                          if (await signInWithGoogle() != null) {
+                            final user = FirebaseAuth.instance.currentUser;
+                            final token = await user?.getIdToken();
+
+                            final loginProvider = Provider.of<LoginProvider>(
+                              context,
+                              listen: false,
+                            );
+
+                            await loginProvider.setToken(token!, user!.uid);
+                            // for logout
+                            // final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+                            // await loginProvider.clearToken();
+                            // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+                            final response = await verifyUser(
+                              url: "${AppStrings.serverBaseUrl}/auth/verify",
+                              body: {"uid": user.uid},
+                              loginProvider: loginProvider,
+                            );
+
+                            // not a new user
+                            if (response.statusCode == 202) {
+                              Navigator.of(
+                                context,
+                              ).pushReplacementNamed(AppRoutes.medicineAlerts);
+                            }
+                            // new user
+                            else if (response.statusCode == 201) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => SignupOptions(),
+                                ),
+                              );
+                            } else {
+                              loginProvider.clearToken();
+                              throw Exception();
+                            }
+                          }
+                        },
                         action: "Login",
                       ),
                     ],

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "524355519286",
+    "project_id": "gsc-swatify",
+    "storage_bucket": "gsc-swatify.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524355519286:android:957379efaa622a358ca997",
+        "android_client_info": {
+          "package_name": "com.example.swastify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524355519286-8si57iqtohch1pqv1j1t1r8in8o4pk2v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.swastify",
+            "certificate_hash": "2f1c33dba028fa3fd71c825eded5d2237551607a"
+          }
+        },
+        {
+          "client_id": "524355519286-3dbiq4univupkd10j3d1s4125b3tvl0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA4A2qi5b_f9qQmshAbn1U-GY8AS_B6j0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524355519286-3dbiq4univupkd10j3d1s4125b3tvl0e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "524355519286-i1hqdmf7g5pjaflrkqok69ndk3eb420i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.swastify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

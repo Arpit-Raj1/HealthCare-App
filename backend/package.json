@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Backend for Swastify",
     "author": "",
+    "type": "module",
     "license": "ISC",
     "main": "app.js",
     "type": "module",
