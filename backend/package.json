@@ -12,8 +12,14 @@
         "seed": "node prisma/seed.js"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "node --watch app.js"
+        "dev": "node --watch app.js",
+        "migrate-initial-schema": "prisma migrate dev --name init",
+        "migrate-new-schema": "prisma migrate dev",
+        "prisma-studio": "prisma studio",
+        "sow-seeds": "prisma db seed",
+        "start": "node app.js",
+        "sync-db->prisma": "prisma db pull",
+        "sync-prisma->db": "prisma db push"
     },
     "dependencies": {
         "@prisma/client": "^6.5.0",
