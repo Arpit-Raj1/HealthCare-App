@@ -58,13 +58,13 @@ class _SideBarState extends State<SideBar> {
         );
         Navigator.pushReplacementNamed(context, AppRoutes.chatPage);
         break;
-      // case 5:
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     AppRoutes.emergencyContactList,
-      //     (route) => false,
-      //   );
-      //   break;
+      case 5:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.emergency,
+          (route) => false,
+        );
+        break;
       case 6:
         Navigator.pushReplacementNamed(context, AppRoutes.profile);
         break;
