@@ -40,8 +40,8 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
         if (value == null || value.isEmpty) {
           return "Please enter password";
         }
-        if (value.length < 8) {
-          return "Password length should be at least 8";
+        if (value.length < 6) {
+          return "Password length should be at least 6";
         }
         return null;
       },

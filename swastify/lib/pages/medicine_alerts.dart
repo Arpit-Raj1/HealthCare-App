@@ -6,7 +6,9 @@ import 'package:swastify/components/medicine_tile.dart';
 import 'package:swastify/components/search_bar.dart';
 import 'package:swastify/components/sidebar.dart';
 import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/services/medicine_alerts_services.dart';
 import 'package:swastify/styles/app_colors.dart';
+import 'package:swastify/styles/app_text.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,31 +32,28 @@ class MedicineAlertsScreen extends StatefulWidget {
 }
 
 class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
-  List<Map<String, dynamic>> medicines = [
-    {
-      "name": "Paracetamol",
-      "times": ["7:00 AM", "4:00 PM"],
-      "enabled": true,
-    },
-    {
-      "name": "Cetrizine",
-      "times": ["7:00 AM", "4:00 PM"],
-      "enabled": true,
-    },
-    {
-      "name": "Paracetamol",
-      "times": ["7:00 AM", "4:00 PM"],
-      "enabled": false,
-    },
-  ];
-
+  List<Map<String, dynamic>> medicines = [];
   List<Map<String, dynamic>> filteredMedicines = [];
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredMedicines = medicines;
+    _loadMedicines();
+  }
+
+  /// Load medicines from local storage
+  Future<void> _loadMedicines() async {
+    final loadedMedicines = await MedicineAlertsService.loadMedicines();
+    setState(() {
+      medicines = loadedMedicines;
+      filteredMedicines = List.from(medicines);
+    });
+  }
+
+  /// Save medicines to local storage
+  Future<void> _saveMedicines() async {
+    await MedicineAlertsService.saveMedicines(medicines);
   }
 
   void _filterMedicines(String query) {
@@ -81,6 +80,7 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
           onDelete: () {
             setState(() {
               medicines.removeAt(index);
+              _saveMedicines(); // Save after deletion
               _filterMedicines(searchController.text);
             });
             Navigator.pop(context);
@@ -112,7 +112,7 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
               title: Text("Delete"),
               onTap: () {
                 Navigator.pop(context);
-                _showDeleteDialog(context, index); // Show delete confirmation
+                _showDeleteDialog(context, index);
               },
             ),
           ],
@@ -124,21 +124,23 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
   void _editMedicine(int index) {
     showDialog(
       context: context,
-      builder:
-          (context) => AddMedicineDialog(
-            initialName: medicines[index]["name"],
-            initialTimes: List<String>.from(medicines[index]["times"]),
-            onAdd: (name, times) {
-              setState(() {
-                medicines[index] = {
-                  "name": name,
-                  "times": times,
-                  "enabled": medicines[index]["enabled"],
-                };
-                _filterMedicines(searchController.text);
-              });
-            },
-          ),
+      builder: (context) {
+        return AddMedicineDialog(
+          initialName: medicines[index]["name"],
+          initialTimes: List<String>.from(medicines[index]["times"]),
+          onAdd: (name, times) {
+            setState(() {
+              medicines[index] = {
+                "name": name,
+                "times": times,
+                "enabled": medicines[index]["enabled"],
+              };
+              _saveMedicines();
+              _filterMedicines(searchController.text);
+            });
+          },
+        );
+      },
     );
   }
 
@@ -147,72 +149,104 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
     return Scaffold(
       appBar: Appbar(title: AppStrings.medicineAlerts),
       drawer: SideBar(selectedIndex: 1),
-      body: Column(
+      body:
+          medicines.isEmpty ? _buildEmptyState(context) : _buildMedicineList(),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Expanded(
+      child: Column(
         children: [
-          CustomSearchBar(
-            controller: searchController,
-            onChanged: _filterMedicines,
+          Spacer(),
+          SizedBox(height: 16),
+          Text(
+            AppStrings.addMedicineAlerts,
+            style: AppText.header1.copyWith(
+              fontWeight: FontWeight.w400,
+              color: AppColors.greyText,
+            ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredMedicines.length,
-              itemBuilder: (context, index) {
-                var medicine = filteredMedicines[index];
-                return MedicineTile(
-                  name: medicine["name"],
-                  times: medicine["times"],
-                  enabled: medicine["enabled"],
-                  onChanged: (value) {
+          Spacer(),
+          _addButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMedicineList() {
+    return Column(
+      children: [
+        CustomSearchBar(
+          controller: searchController,
+          onChanged: _filterMedicines,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredMedicines.length,
+            itemBuilder: (context, index) {
+              var medicine = filteredMedicines[index];
+              return MedicineTile(
+                name: medicine["name"],
+                times: List<String>.from(medicine["times"]),
+                enabled: medicine["enabled"],
+                onChanged: (value) {
+                  setState(() {
+                    medicines[medicines.indexOf(medicine)]["enabled"] = value;
+                    _saveMedicines();
+                    _filterMedicines(searchController.text);
+                  });
+                },
+                onTap: () {
+                  _showMedicineOptions(context, medicines.indexOf(medicine));
+                },
+              );
+            },
+          ),
+        ),
+        _addButton(context),
+      ],
+    );
+  }
+
+  Widget _addButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AddMedicineDialog(
+                  onAdd: (name, times) {
                     setState(() {
-                      medicines[medicines.indexOf(medicine)]["enabled"] = value;
+                      medicines.add({
+                        "name": name,
+                        "times": times,
+                        "enabled": true,
+                      });
+                      _saveMedicines(); // Save after adding
                       _filterMedicines(searchController.text);
                     });
                   },
-                  onTap: () {
-                    _showMedicineOptions(context, medicines.indexOf(medicine));
-                  },
                 );
               },
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            padding: EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder:
-                        (context) => AddMedicineDialog(
-                          onAdd: (name, times) {
-                            setState(() {
-                              medicines.add({
-                                "name": name,
-                                "times": times,
-                                "enabled": true,
-                              });
-                              _filterMedicines(searchController.text);
-                            });
-                          },
-                        ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  AppStrings.add,
-                  style: TextStyle(fontSize: 18, color: AppColors.buttonText),
-                ),
-              ),
-            ),
+          child: Text(
+            AppStrings.add,
+            style: TextStyle(fontSize: 18, color: AppColors.buttonText),
           ),
-        ],
+        ),
       ),
     );
   }

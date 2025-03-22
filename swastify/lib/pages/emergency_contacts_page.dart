@@ -3,6 +3,7 @@ import 'package:swastify/components/app_bar.dart';
 import 'package:swastify/components/search_bar.dart';
 import 'package:swastify/components/sidebar.dart';
 import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/services/contacts_services.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -17,10 +18,7 @@ class EmergencyContactsScreen extends StatefulWidget {
 }
 
 class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
-  List<Map<String, String>> contacts = List.generate(
-    1,
-    (index) => {"name": "Aditya Aryan", "phone": "+91 7979737747"},
-  );
+  List<Map<String, String>> contacts = [];
   List<Map<String, String>> filteredContacts = [];
   Set<int> selectedIndexes = {};
   TextEditingController searchController = TextEditingController();
@@ -28,8 +26,23 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
   @override
   void initState() {
     super.initState();
-    filteredContacts = List.from(contacts);
+    _loadContacts();
     searchController.addListener(_filterContacts);
+  }
+
+  /// Load contacts from storage
+  Future<void> _loadContacts() async {
+    List<Map<String, String>> savedContacts =
+        await EmergencyContactsService.loadEmergencyContacts();
+    setState(() {
+      contacts = savedContacts;
+      filteredContacts = List.from(contacts);
+    });
+  }
+
+  /// Save contacts to storage
+  Future<void> _saveContacts() async {
+    await EmergencyContactsService.saveEmergencyContacts(contacts);
   }
 
   void _filterContacts() {
@@ -55,7 +68,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
     });
   }
 
-  void _deleteSelectedContacts() {
+  void _deleteSelectedContacts() async {
     setState(() {
       contacts =
           contacts
@@ -67,6 +80,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       filteredContacts = List.from(contacts);
       selectedIndexes.clear();
     });
+    await _saveContacts();
   }
 
   void _showAddContactPopup(BuildContext context) {
@@ -77,21 +91,21 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Add Emergency Contact"),
+          title: const Text("Add Emergency Contact"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Name",
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Phone Number",
                   prefixText: "+91 ",
                   border: OutlineInputBorder(),
@@ -103,10 +117,10 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (nameController.text.isNotEmpty &&
                     phoneController.text.isNotEmpty) {
                   setState(() {
@@ -116,10 +130,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                     });
                     filteredContacts = List.from(contacts);
                   });
+                  await _saveContacts();
                   Navigator.pop(context);
                 }
               },
-              child: Text("Add"),
+              child: const Text("Add"),
             ),
           ],
         );
@@ -139,21 +154,21 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Edit Contact"),
+          title: const Text("Edit Contact"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Name",
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Phone Number",
                   prefixText: "+91 ",
                   border: OutlineInputBorder(),
@@ -165,10 +180,10 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (nameController.text.isNotEmpty &&
                     phoneController.text.isNotEmpty) {
                   setState(() {
@@ -178,10 +193,11 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                     };
                     filteredContacts = List.from(contacts);
                   });
+                  await _saveContacts();
                   Navigator.pop(context);
                 }
               },
-              child: Text("Save"),
+              child: const Text("Save"),
             ),
           ],
         );
@@ -191,124 +207,126 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget? emptyBody;
+    PreferredSizeWidget? appBar1;
+    if (contacts.isEmpty) {
+      appBar1 = Appbar(title: AppStrings.emergencyContactList);
+      emptyBody = Center(
+        child: Text(
+          AppStrings.addContacts,
+          style: AppText.header1.copyWith(
+            fontWeight: FontWeight.w100,
+            color: AppColors.greyText,
+          ),
+        ),
+      );
+    }
     return Scaffold(
-      appBar: Appbar(
-        title:
-            selectedIndexes.isNotEmpty
-                ? "${selectedIndexes.length} Selected"
-                : "Emergency Contacts",
-        actions:
-            selectedIndexes.isNotEmpty
-                ? [
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: _deleteSelectedContacts,
-                  ),
-                ]
-                : [],
-      ),
-      drawer: SideBar(selectedIndex: 5),
-
-      body: GestureDetector(
-        onTap: () {
-          if (selectedIndexes.isNotEmpty) {
-            setState(() {
-              selectedIndexes.clear();
-            });
-          }
-        },
-        child: Column(
-          children: [
-            CustomSearchBar(controller: searchController),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: TextField(
-            //     controller: searchController,
-            //     decoration: InputDecoration(
-            //       prefixIcon: Icon(Icons.search),
-            //       hintText: "Search",
-            //       border: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredContacts.length,
-                itemBuilder: (context, index) {
-                  final isSelected = selectedIndexes.contains(index);
-                  return ListTile(
-                    onLongPress: () => _toggleSelection(index),
-                    onTap: () {
-                      if (selectedIndexes.isNotEmpty) {
-                        _toggleSelection(index);
-                      }
-                    },
-                    tileColor: isSelected ? Colors.blue.shade100 : null,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.blue.shade100,
-                      child: Icon(Icons.person, color: AppColors.primary),
-                    ),
-                    title: Text(
-                      filteredContacts[index]['name']!,
-                      style: AppText.header2.copyWith(
-                        fontWeight: FontWeight.w500,
+      appBar:
+          appBar1 ??
+          Appbar(
+            title:
+                selectedIndexes.isNotEmpty
+                    ? "${selectedIndexes.length} Selected"
+                    : AppStrings.emergencyContactList,
+            actions:
+                selectedIndexes.isNotEmpty
+                    ? [
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: _deleteSelectedContacts,
                       ),
-                    ),
-                    subtitle: Text(
-                      filteredContacts[index]['phone']!,
-                      style: AppText.body2,
-                    ),
-                    trailing: PopupMenuButton<ProfileMenu>(
-                      onSelected: (value) {
-                        switch (value) {
-                          case ProfileMenu.edit:
+                    ]
+                    : [],
+          ),
+      drawer: const SideBar(selectedIndex: 5),
+      body:
+          emptyBody ??
+          GestureDetector(
+            onTap: () {
+              if (selectedIndexes.isNotEmpty) {
+                setState(() {
+                  selectedIndexes.clear();
+                });
+              }
+            },
+            child: Column(
+              children: [
+                CustomSearchBar(controller: searchController),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredContacts.length,
+                    itemBuilder: (context, index) {
+                      final isSelected = selectedIndexes.contains(index);
+                      return ListTile(
+                        onLongPress: () => _toggleSelection(index),
+                        onTap: () {
+                          if (selectedIndexes.isNotEmpty) {
+                            _toggleSelection(index);
+                          }
+                        },
+                        tileColor: isSelected ? Colors.blue.shade100 : null,
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blue.shade100,
+                          child: const Icon(
+                            Icons.person,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        title: Text(
+                          filteredContacts[index]['name']!,
+                          style: AppText.header2.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          filteredContacts[index]['phone']!,
+                          style: AppText.body2,
+                        ),
+                        trailing: PopupMenuButton<ProfileMenu>(
+                          onSelected: (value) async {
                             int actualIndex = contacts.indexWhere(
                               (contact) =>
                                   contact["phone"] ==
                                   filteredContacts[index]["phone"],
                             );
                             if (actualIndex != -1) {
-                              _showEditContactPopup(context, actualIndex);
+                              if (value == ProfileMenu.edit) {
+                                _showEditContactPopup(context, actualIndex);
+                              } else if (value == ProfileMenu.delete) {
+                                setState(() {
+                                  contacts.removeAt(actualIndex);
+                                  filteredContacts = List.from(contacts);
+                                });
+                                await _saveContacts();
+                              }
                             }
-                            break;
-                          case ProfileMenu.call:
-                            break;
-                          case ProfileMenu.delete:
-                            setState(() {
-                              contacts.removeAt(index);
-                              filteredContacts = List.from(contacts);
-                            });
-                            break;
-                        }
-                      },
-
-                      icon: const Icon(Icons.more_vert_rounded),
-                      itemBuilder: (context) {
-                        return [
-                          const PopupMenuItem(
-                            value: ProfileMenu.edit,
-                            child: Text(AppStrings.edit),
-                          ),
-                          const PopupMenuItem(
-                            value: ProfileMenu.delete,
-                            child: Text("Delete"),
-                          ),
-                        ];
-                      },
-                    ),
-                  );
-                },
-              ),
+                          },
+                          icon: const Icon(Icons.more_vert_rounded),
+                          itemBuilder: (context) {
+                            return const [
+                              PopupMenuItem(
+                                value: ProfileMenu.edit,
+                                child: Text(AppStrings.edit),
+                              ),
+                              PopupMenuItem(
+                                value: ProfileMenu.delete,
+                                child: Text("Delete"),
+                              ),
+                            ];
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddContactPopup(context),
         backgroundColor: const Color.fromARGB(255, 130, 184, 255),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

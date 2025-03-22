@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:swastify/components/app_bar.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
 import 'package:swastify/components/sidebar.dart';
 import 'package:swastify/config/app_strings.dart';
-import 'package:swastify/provider/app_repo.dart';
+import 'package:swastify/services/user_details_services.dart'; // Import UserDetailsService
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider<AppRepo>(
-      create: (context) => AppRepo(),
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +35,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserDetails();
+  }
+
+  /// Fetches user details from local storage and updates the text fields
+  Future<void> _loadUserDetails() async {
+    String name = await UserDetailsService.getUserName();
+    String number = await UserDetailsService.getUserNumber();
+
+    setState(() {
+      _nameController.text = name;
+      _phoneController.text = number;
+    });
+  }
+
+  /// Updates the user's name and phone number in local storage
+  Future<void> _updateUserDetails() async {
+    String newName = _nameController.text.trim();
+    String newNumber = _phoneController.text.trim();
+
+    await UserDetailsService.saveUserDetails(newName, newNumber);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("User details updated successfully!")),
+    );
+  }
+
   String? validator(String? value) {
     return null;
   }
@@ -106,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _updateUserDetails, // Call update function
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     padding: EdgeInsets.symmetric(vertical: 14),
