@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swastify/components/action_with_button.dart';
@@ -7,6 +8,7 @@ import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
+import 'package:swastify/services/auth_service.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,6 +30,16 @@ class _LoginPageState extends State<LoginPage> {
       // Form is valid, proceed with login
       Navigator.of(context).pushReplacementNamed(AppRoutes.medicineAlerts);
     } else {}
+  }
+
+  Future<void> submitLogin() async {
+    _validateForm();
+    await signInWithEmailPassword(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    print("Signed in");
   }
 
   @override
@@ -86,7 +98,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 5),
 
-                      AppButton(onPressed: _validateForm, hintText: "Login"),
+                      AppButton(
+                        onPressed: () async {
+                          await submitLogin();
+                        },
+                        hintText: "Login",
+                      ),
                       const SizedBox(height: 7),
 
                       Row(
@@ -113,7 +130,16 @@ class _LoginPageState extends State<LoginPage> {
                       ActionWithButton(
                         fileLoc: "assets/images/google_logo.png",
                         provider: "Google",
-                        onPressed: () {},
+                        onPressed: () async {
+                          print("Google");
+                          if (await signInWithGoogle() != null) {
+                            final user = FirebaseAuth.instance.currentUser;
+                            print(user);
+                          }
+                          Navigator.of(
+                            context,
+                          ).pushReplacementNamed(AppRoutes.medicineAlerts);
+                        },
                         action: "Login",
                       ),
                     ],
