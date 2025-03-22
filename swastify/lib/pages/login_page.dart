@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/pages/forgot_password_page.dart';
 import 'package:swastify/pages/signup_options.dart';
+import 'package:swastify/provider/login_provider.dart';
 import 'package:swastify/services/auth_service.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -96,11 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-
-                      AppButton(
-                        onPressed: _validateForm,
-                        hintText: "Login",
-                      ), // Calls _validateForm()
+                      // Calls _validateForm()
                       AppButton(
                         onPressed: () async {
                           await submitLogin();
@@ -133,14 +132,45 @@ class _LoginPageState extends State<LoginPage> {
                         fileLoc: "assets/images/google_logo.png",
                         provider: "Google",
                         onPressed: () async {
-                          print("Google");
+                          // print("Google");
                           if (await signInWithGoogle() != null) {
                             final user = FirebaseAuth.instance.currentUser;
-                            print(user);
+                            final token = await user?.getIdToken();
+
+                            final loginProvider = Provider.of<LoginProvider>(
+                              context,
+                              listen: false,
+                            );
+
+                            await loginProvider.setToken(token!, user!.uid);
+                            // for logout
+                            // final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+                            // await loginProvider.clearToken();
+                            // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
+                            final response = await verifyUser(
+                              url: "${AppStrings.serverBaseUrl}/auth/verify",
+                              body: {"uid": user.uid},
+                              loginProvider: loginProvider,
+                            );
+
+                            // not a new user
+                            if (response.statusCode == 202) {
+                              Navigator.of(
+                                context,
+                              ).pushReplacementNamed(AppRoutes.medicineAlerts);
+                            }
+                            // new user
+                            else if (response.statusCode == 201) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => SignupOptions(),
+                                ),
+                              );
+                            } else {
+                              loginProvider.clearToken();
+                              throw Exception();
+                            }
                           }
-                          Navigator.of(
-                            context,
-                          ).pushReplacementNamed(AppRoutes.medicineAlerts);
                         },
                         action: "Login",
                       ),

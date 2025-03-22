@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:swastify/provider/login_provider.dart';
+import 'dart:convert';
 
 Future<UserCredential> signInWithEmailPassword(
   String email,
@@ -41,4 +44,27 @@ Future<UserCredential?> signInWithGoogle() async {
     print('Google Sign-In Error: $e');
     rethrow;
   }
+}
+
+Future<http.Response> verifyUser({
+  required String url,
+  required Map<String, dynamic> body,
+  required LoginProvider loginProvider,
+}) async {
+  final token = loginProvider.token;
+
+  if (token == null || token.isEmpty) {
+    throw Exception("No auth token found. Please login first.");
+  }
+
+  final response = await http.post(
+    Uri.parse(url),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode(body),
+  );
+
+  return response;
 }

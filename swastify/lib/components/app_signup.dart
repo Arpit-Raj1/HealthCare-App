@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
 import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/provider/login_provider.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class AppSignup extends StatefulWidget {
@@ -160,6 +162,7 @@ class _AppSignupState extends State<AppSignup> {
 
   @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -170,12 +173,24 @@ class _AppSignupState extends State<AppSignup> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 50),
-                Text("Sign up as a ${widget.role}", style: AppText.header1),
-                const SizedBox(height: 5),
-                const Text(
-                  "Create an account to get started",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
+                if (loginProvider.isLoggedIn == true) ...[
+                  Text(
+                    "Complete your Profile as Patient",
+                    style: AppText.header1,
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    "Fill in the details",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ] else ...[
+                  Text("Sign up as a ${widget.role}", style: AppText.header1),
+                  const SizedBox(height: 5),
+                  const Text(
+                    "Create an account to get started",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 AppTextField(
                   hint: 'Name',
