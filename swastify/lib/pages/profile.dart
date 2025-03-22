@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swastify/components/app_bar.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
 import 'package:swastify/components/sidebar.dart';
 import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/provider/app_repo.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider<AppRepo>(
+      create: (context) => AppRepo(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -79,6 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(height: 20),
               AppTextField(
                 hint: AppStrings.email,
+                enabled: false,
                 controller: _emailController,
                 validator: validator,
               ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/components/add_medicine_dialog_box.dart';
+import 'package:swastify/components/alert_dialog.dart';
 import 'package:swastify/components/app_bar.dart';
 import 'package:swastify/components/medicine_tile.dart';
+import 'package:swastify/components/search_bar.dart';
 import 'package:swastify/components/sidebar.dart';
 import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/styles/app_colors.dart';
@@ -68,6 +70,26 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
     });
   }
 
+  void _showDeleteDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialogBox(
+          action: AppStrings.remove,
+          title: AppStrings.removeMedicine,
+          body: AppStrings.confirmRemoveMedicine,
+          onDelete: () {
+            setState(() {
+              medicines.removeAt(index);
+              _filterMedicines(searchController.text);
+            });
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
   void _showMedicineOptions(BuildContext context, int index) {
     showModalBottomSheet(
       context: context,
@@ -89,11 +111,8 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
               leading: Icon(Icons.delete, color: Colors.red),
               title: Text("Delete"),
               onTap: () {
-                setState(() {
-                  medicines.removeAt(index);
-                  _filterMedicines(searchController.text);
-                });
                 Navigator.pop(context);
+                _showDeleteDialog(context, index); // Show delete confirmation
               },
             ),
           ],
@@ -130,25 +149,9 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
       drawer: SideBar(selectedIndex: 1),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: TextField(
-              controller: searchController,
-              onChanged: _filterMedicines,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: AppColors.greyText),
-                hintText: AppStrings.search,
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
+          CustomSearchBar(
+            controller: searchController,
+            onChanged: _filterMedicines,
           ),
           Expanded(
             child: ListView.builder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -130,14 +131,10 @@ class _AddMedicineDialogState extends State<AddMedicineDialog> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
-              "Add",
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
+            child: Text(AppStrings.add, style: AppText.buttonText),
           ),
         ),
       ],
     );
   }
 }
-  

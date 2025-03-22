@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/components/app_signup.dart';
-import 'package:swastify/pages/emergency_contacts_page.dart';
 import 'package:swastify/pages/chat_page.dart';
+import 'package:swastify/pages/emergency_contacts_page.dart';
 import 'package:swastify/pages/login_page.dart';
 import 'package:swastify/pages/medicine_alerts.dart';
 import 'package:swastify/pages/profile.dart';
+import 'package:swastify/pages/reports.dart';
 
 class AppRoutes {
   static const login = '/';
@@ -13,6 +14,7 @@ class AppRoutes {
   static const chatPage = '/chatPage';
   static const medicineAlerts = '/medicineAlerts';
   static const profile = '/profile';
+  static const reports = '/reports';
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -21,9 +23,12 @@ class AppRoutes {
 
       case chatPage:
         return MaterialPageRoute(builder: (_) => MessagesScreen());
-        
+
       case medicineAlerts:
         return MaterialPageRoute(builder: (_) => MedicineAlertsScreen());
+
+      case reports:
+        return MaterialPageRoute(builder: (_) => MedicalReportsScreen());
 
       case profile:
         return MaterialPageRoute(builder: (_) => SettingsScreen());
