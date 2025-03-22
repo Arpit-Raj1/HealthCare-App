@@ -13,7 +13,7 @@ class AppStrings {
   static const reports = 'Reports';
   static const maps = 'Maps';
   static const messages = 'Messages';
-  static const emergencyContactList = 'Emergency Contact List';
+  static const emergencyContactList = 'Emergency Contacts';
   static const settings = 'Settings';
   static const update = 'Update';
   static const add = 'Add';
@@ -47,4 +47,6 @@ class AppStrings {
   static const rename = "Rename";
   static const confirmRemoveReport =
       "Are you sure you want to remove this report";
+  static const addContacts = "Add Emergency Contacts";
+  static const addMedicineAlerts = "Add Medicine Alerts";
 }

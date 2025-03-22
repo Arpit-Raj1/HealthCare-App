@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swastify/components/action_with_button.dart';
 import 'package:swastify/components/app_button.dart';
 import 'package:swastify/components/app_email_field.dart';
@@ -19,15 +20,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Form Key
 
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Single Form Key
-
-  void _validateForm() {
+  void _validateForm() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Form is valid, proceed with login
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('loggedIn', true); // Set user as logged in
       Navigator.of(context).pushReplacementNamed(AppRoutes.medicineAlerts);
-    } else {}
+    }
   }
 
   @override
@@ -42,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
                   horizontal: constraints.maxWidth > 600 ? 100 : 20,
                 ),
                 child: Form(
-                  // Wrap both fields inside a single Form
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +85,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 5),
 
-                      AppButton(onPressed: _validateForm, hintText: "Login"),
+                      AppButton(
+                        onPressed: _validateForm,
+                        hintText: "Login",
+                      ), // Calls _validateForm()
                       const SizedBox(height: 7),
 
                       Row(

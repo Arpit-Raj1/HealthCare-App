@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/config/app_strings.dart';
+import 'package:swastify/services/user_details_services.dart'; // Import UserDetailsService
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
 
@@ -14,11 +15,24 @@ class SideBar extends StatefulWidget {
 
 class _SideBarState extends State<SideBar> {
   late int _selectedIndex;
+  String userName = "User"; // Default
+  String userNumber = "Not Available"; // Default
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.selectedIndex;
+    _loadUserDetails(); // Fetch details from storage
+  }
+
+  /// Load user details from `UserDetailsService`
+  Future<void> _loadUserDetails() async {
+    String name = await UserDetailsService.getUserName();
+    String number = await UserDetailsService.getUserNumber();
+    setState(() {
+      userName = name;
+      userNumber = number;
+    });
   }
 
   void onItemTapped(BuildContext context, int index) {
@@ -44,14 +58,6 @@ class _SideBarState extends State<SideBar> {
         );
         Navigator.pushNamed(context, AppRoutes.reports);
         break;
-      // case 3:
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     AppRoutes.medicineAlerts,
-      //     (route) => false,
-      //   );
-      //   Navigator.pushNamed(context, AppRoutes.maps);
-      //   break;
       case 4:
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -79,8 +85,8 @@ class _SideBarState extends State<SideBar> {
       child: Column(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text("Haley James", style: AppText.body2),
-            accountEmail: Text("+91 7979737747", style: AppText.body2),
+            accountName: Text(userName, style: AppText.body2),
+            accountEmail: Text(userNumber, style: AppText.body2),
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage(AppStrings.profilePic),
             ),
