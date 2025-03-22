@@ -6,6 +6,7 @@
     "type": "module",
     "license": "ISC",
     "main": "app.js",
+    "type": "module",
     "devDependencies": {
         "prisma": "^6.5.0"
     },
@@ -13,8 +14,14 @@
         "seed": "node prisma/seed.js"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "node --watch app.js"
+        "dev": "node --watch app.js",
+        "migrate-initial-schema": "prisma migrate dev --name init",
+        "migrate-new-schema": "prisma migrate dev",
+        "prisma-studio": "prisma studio",
+        "sow-seeds": "prisma db seed",
+        "start": "node app.js",
+        "sync-db->prisma": "prisma db pull",
+        "sync-prisma->db": "prisma db push"
     },
     "dependencies": {
         "@prisma/client": "^6.5.0",
@@ -24,6 +31,7 @@
         "express": "^4.21.2",
         "express-async-handler": "^1.2.0",
         "express-validator": "^7.2.1",
-        "firebase": "^11.5.0"
+        "firebase-admin": "^13.2.0",
+        "jsonwebtoken": "^9.0.2"
     }
 }

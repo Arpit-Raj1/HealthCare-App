@@ -1,29 +1,29 @@
-// import express from 'express';
-// import expressAsyncHandler from 'express-async-handler';
-// import { fetchRequestUrl } from './utils/fetchRequestUrl.utils.js';
-// import cors from 'cors';
+import cors from 'cors';
+import 'dotenv/config';
+import express from 'express';
 
-// const app = express();
-// const port = 3000;
+import authRouter from './routes/auth-router.js';
 
-// app.use(cors());
+const PORT = process.env.PORT || 3000;
 
-// app.get('/', (req, res) => {
-//     res.send('Hello World!');
-// });
+const app = express();
 
-// app.post('/verify', async (req, res) => {
-//     const data = {
-//         registrationNumber: '12345',
-//         stateMedicalCouncil: 'Bombay Medical Council',
-//         yearOfRegistration: '1960',
-//     };
+/* handle cross-origin requests */
+app.use(cors());
 
-//     const requestUrl = await fetchRequestUrl(data);
-//     console.log(requestUrl);
-//     res.send(requestUrl);
-// });
+/* parse  */
+app.use(express.json());
 
-// app.listen(port, () => {
-//     console.log(`App is running on http://localhost:${port}`);
-// });
+/* routes */
+app.use('/auth', authRouter);
+
+/* async error handler */
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(400).json(err);
+});
+
+/* startup */
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT} ...`);
+});

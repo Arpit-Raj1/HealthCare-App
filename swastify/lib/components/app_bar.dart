@@ -4,7 +4,9 @@ import 'package:swastify/styles/app_text.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const Appbar({super.key, required this.title});
+  final List<Widget>? actions;
+
+  const Appbar({super.key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
               },
             ),
       ),
+      actions: actions ?? [],
     );
   }
 

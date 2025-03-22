@@ -6,7 +6,7 @@ class AppText {
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
-  static const header2 = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+  static const header2 = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
   static const subtitle1 = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
   static var subtitle2 = GoogleFonts.poppins(
     fontSize: 24,

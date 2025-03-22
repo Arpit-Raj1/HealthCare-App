@@ -14,7 +14,7 @@ model User {
   password       String
   phoneNumber    String?     @unique
   profilePicture String?
-  dob            DateTime
+  dob            String
   address        String?
   role           Role
   doctorInfo     DoctorInfo?
