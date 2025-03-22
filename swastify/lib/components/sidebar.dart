@@ -36,19 +36,21 @@ class _SideBarState extends State<SideBar> {
           (route) => false,
         );
         break;
-      // case 2:
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     AppRoutes.reports,
-      //     (route) => false,
-      //   );
-      //   break;
+      case 2:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.medicineAlerts,
+          (route) => false,
+        );
+        Navigator.pushNamed(context, AppRoutes.reports);
+        break;
       // case 3:
       //   Navigator.pushNamedAndRemoveUntil(
       //     context,
-      //     AppRoutes.maps,
+      //     AppRoutes.medicineAlerts,
       //     (route) => false,
       //   );
+      //   Navigator.pushNamed(context, AppRoutes.maps);
       //   break;
       case 4:
         Navigator.pushNamedAndRemoveUntil(

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swastify/pages/login_page.dart';
 import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
-// import 'package:swastify/s.dart';
-// import 'package:swastify/styles/app_text';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});

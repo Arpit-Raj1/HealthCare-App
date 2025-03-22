@@ -22,7 +22,10 @@ class MedicineTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: Icon(Icons.alarm, color: AppColors.primary, size: 40),
-      title: Text(name, style: AppText.header2),
+      title: Text(
+        name,
+        style: AppText.header2.copyWith(fontWeight: FontWeight.w500),
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children:
