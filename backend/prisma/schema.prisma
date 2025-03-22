@@ -8,22 +8,16 @@ datasource db {
 }
 
 model User {
-  id                  String      @id @default(uuid()) @db.Uuid
-  name                String
-  email               String      @unique
-  password            String
-  phoneNumber         String      @unique
-  profilePicture      String?
-  dob                 DateTime
-  address             String?
-  Role                Role
-  doctorInfo          DoctorInfo?
-  dateOfRegistration  DateTime
-  registrationNumber  String
-  stateMedicalCouncil String
-  qualification       String
-  qualificationYear   String
-  university          String
+  id             String      @id @default(uuid())
+  name           String
+  email          String      @unique
+  password       String
+  phoneNumber    String      @unique
+  profilePicture String?
+  dob            DateTime
+  address        String?
+  role           Role
+  doctorInfo     DoctorInfo?
 
   accountCreatedAt         DateTime  @default(now())
   accountUpdatedAt         DateTime? @updatedAt
@@ -54,7 +48,7 @@ model Message {
 }
 
 model DoctorInfo {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id                  String   @id @default(uuid())
   userId              String   @unique
   user                User     @relation(fields: [userId], references: [id])
   dateOfRegistration  DateTime
