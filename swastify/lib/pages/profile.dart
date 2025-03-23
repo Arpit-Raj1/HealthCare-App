@@ -109,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SizedBox(height: 20),
               AppTextField(
-                hint: AppStrings.email,
+                hint: AppStrings.exampleEmail,
                 enabled: false,
                 controller: _emailController,
                 validator: validator,

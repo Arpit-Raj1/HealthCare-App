@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swastify/components/alert_dialog.dart';
 import 'package:swastify/components/app_bar.dart';
 import 'package:swastify/components/search_bar.dart';
@@ -15,12 +21,65 @@ class MedicalReportsScreen extends StatefulWidget {
 }
 
 class _MedicalReportsPageState extends State<MedicalReportsScreen> {
-  List<String> reports = ["Blood Report", "Blood Report", "Blood Report"];
+  List<Map<String, String>> reports = [];
   String searchQuery = "";
 
+  @override
+  void initState() {
+    super.initState();
+    _loadReports();
+  }
+
+  /// Load reports from local storage
+  Future<void> _loadReports() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? storedReports = prefs.getStringList('reports');
+
+    if (storedReports != null) {
+      setState(() {
+        reports =
+            storedReports
+                .map((report) => Map<String, String>.from(jsonDecode(report)))
+                .toList();
+      });
+    }
+  }
+
+  /// Save reports to local storage
+  Future<void> _saveReports() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> storedReports =
+        reports.map((report) => jsonEncode(report)).toList();
+    await prefs.setStringList('reports', storedReports);
+
+  }
+
+  /// Pick and save a file
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null && result.files.single.path != null) {
+      File file = File(result.files.single.path!);
+      Directory appDir = await getApplicationDocumentsDirectory();
+      String newPath = "${appDir.path}/${result.files.single.name}";
+
+      await file.copy(newPath);
+
+      setState(() {
+        reports.add({"name": result.files.single.name, "path": newPath});
+      });
+      _saveReports();
+    }
+  }
+
+  /// Open a file
+  void _openFile(String filePath) {
+    OpenFilex.open(filePath);
+  }
+
+  /// Rename a file
   void _showRenameDialog(int index) {
     TextEditingController renameController = TextEditingController(
-      text: reports[index],
+      text: reports[index]["name"]!,
     );
 
     showDialog(
@@ -54,8 +113,9 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    reports[index] = renameController.text;
+                    reports[index]["name"] = renameController.text;
                   });
+                  _saveReports();
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
@@ -68,15 +128,21 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
     );
   }
 
+  /// Delete a file
   void _showDeleteDialog(int index) {
     showDialog(
       context: context,
       builder:
           (context) => AlertDialogBox(
-            onDelete: () {
+            onDelete: () async {
+              File file = File(reports[index]["path"]!);
+              if (await file.exists()) {
+                await file.delete();
+              }
               setState(() {
                 reports.removeAt(index);
               });
+              _saveReports();
               Navigator.pop(context);
             },
             title: AppStrings.remove,
@@ -88,11 +154,12 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> filteredReports =
+    List<Map<String, String>> filteredReports =
         reports
             .where(
-              (report) =>
-                  report.toLowerCase().contains(searchQuery.toLowerCase()),
+              (report) => report["name"]!.toLowerCase().contains(
+                searchQuery.toLowerCase(),
+              ),
             )
             .toList();
 
@@ -101,7 +168,6 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
       drawer: SideBar(selectedIndex: 2),
       body: Column(
         children: [
-          // Search Bar
           CustomSearchBar(
             onChanged: (value) {
               setState(() {
@@ -109,44 +175,54 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
               });
             },
           ),
-
-          // Reports List
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredReports.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(
-                    Icons.insert_drive_file,
-                    color: AppColors.primary,
-                  ),
-                  title: Text(filteredReports[index], style: AppText.header2),
-                  trailing: PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'Rename') {
-                        _showRenameDialog(index);
-                      } else if (value == 'Delete') {
-                        _showDeleteDialog(index);
-                      }
-                    },
-                    itemBuilder:
-                        (context) => [
-                          const PopupMenuItem(
-                            value: 'Rename',
-                            child: Text("Rename"),
+            child:
+                reports.isEmpty
+                    ? Center(
+                      child: Text("Upload Reports", style: AppText.header2),
+                    )
+                    : ListView.builder(
+                      itemCount: filteredReports.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: const Icon(
+                            Icons.insert_drive_file,
+                            color: AppColors.primary,
                           ),
-                          const PopupMenuItem(
-                            value: 'Delete',
-                            child: Text("Delete"),
+                          title: Text(
+                            filteredReports[index]["name"]!,
+                            style: AppText.header2,
                           ),
-                        ],
-                  ),
-                );
-              },
-            ),
+                          onTap: () {
+                            String filePath = filteredReports[index]["path"]!;
+                            if (filePath.isNotEmpty) {
+                              _openFile(filePath);
+                            }
+                          },
+                          trailing: PopupMenuButton<String>(
+                            onSelected: (value) {
+                              if (value == 'Rename') {
+                                _showRenameDialog(index);
+                              } else if (value == 'Delete') {
+                                _showDeleteDialog(index);
+                              }
+                            },
+                            itemBuilder:
+                                (context) => [
+                                  const PopupMenuItem(
+                                    value: 'Rename',
+                                    child: Text("Rename"),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Delete',
+                                    child: Text("Delete"),
+                                  ),
+                                ],
+                          ),
+                        );
+                      },
+                    ),
           ),
-
-          // Upload Button
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
@@ -159,9 +235,7 @@ class _MedicalReportsPageState extends State<MedicalReportsScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {
-                  // Handle upload action
-                },
+                onPressed: _pickFile,
                 child: const Text(AppStrings.upload, style: AppText.buttonText),
               ),
             ),
