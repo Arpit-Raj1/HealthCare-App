@@ -106,7 +106,7 @@ class _SideBarState extends State<SideBar> {
             Icons.message,
             AppStrings.messages,
             4,
-            hasBadge: true,
+            hasBadge: false,
           ),
           _buildDrawerItem(Icons.contacts, AppStrings.emergencyContactList, 5),
           _buildDrawerItem(Icons.settings, AppStrings.settings, 6),
