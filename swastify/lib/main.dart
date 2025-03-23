@@ -1,6 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:swastify/config/app_routes.dart';
 import 'package:swastify/firebase_options.dart';
 import 'package:swastify/provider/login_provider.dart';
@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(scaffoldBackgroundColor: AppColors.background),
           initialRoute:
               loginProvider.isLoggedIn
-                  ? AppRoutes.medicineAlerts
-                  : AppRoutes.login,
+                  ? AppRoutes.login
+                  : AppRoutes.medicineAlerts,
           onGenerateRoute: AppRoutes.generateRoute,
           debugShowCheckedModeBanner: false,
         );
