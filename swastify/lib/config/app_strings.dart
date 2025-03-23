@@ -49,5 +49,5 @@ class AppStrings {
       "Are you sure you want to remove this report";
   static const addContacts = "Add Emergency Contacts";
   static const addMedicineAlerts = "Add Medicine Alerts";
-  static const serverBaseUrl = "http://10.28.2.62:8000";
+  static const serverBaseUrl = "http://10.0.2.2:8000";
 }

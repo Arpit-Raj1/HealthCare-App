@@ -5,12 +5,18 @@ import 'package:swastify/components/app_email_field.dart';
 import 'package:swastify/components/app_password_field.dart';
 import 'package:swastify/components/app_text_field.dart';
 import 'package:swastify/config/app_routes.dart';
+import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/provider/login_provider.dart';
+import 'package:swastify/services/auth_service.dart';
 import 'package:swastify/styles/app_text.dart';
 
 class AppSignup extends StatefulWidget {
   final String role;
   const AppSignup({super.key, required this.role});
+  // final loginProvider = Provider.of<LoginProvider>(
+  //                             context,
+  //                             listen: false,
+  //                           );
 
   @override
   State<AppSignup> createState() => _AppSignupState();
@@ -27,6 +33,8 @@ class _AppSignupState extends State<AppSignup> {
       TextEditingController();
   final TextEditingController _yearOfRegistrationController =
       TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -74,7 +82,7 @@ class _AppSignupState extends State<AppSignup> {
         const SnackBar(content: Text("Form is valid! Proceeding...")),
       );
       Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.login,
+        AppRoutes.medicineAlerts,
         (Route<dynamic> route) => false,
       );
     } else {
@@ -84,6 +92,25 @@ class _AppSignupState extends State<AppSignup> {
         ),
       );
     }
+  }
+
+  void submitForm() {
+    _validateForm();
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    verifyUser(
+      url: "${AppStrings.serverBaseUrl}/auth/create-profile",
+      body: {
+        "name": _nameController.text,
+        "email": _emailController.text,
+        "dob": _dobController.text,
+        "role": widget.role,
+        "phoneNumber": _phoneNumberController.text,
+        "registrationNumber": _nmcController.text,
+        "stateMedicalCouncil": _stateMedicalCouncilController.text,
+        "yearOfRegistration": _yearOfRegistrationController.text,
+      },
+      loginProvider: loginProvider,
+    );
   }
 
   String? nameValidator(value) {
@@ -203,15 +230,28 @@ class _AppSignupState extends State<AppSignup> {
                   controller: _emailController,
                 ),
                 const SizedBox(height: 15),
-                AppPasswordField(
-                  hint: 'Create a password',
-                  controller: _passwordController,
+                AppTextField(
+                  hint: 'Date of Birth',
+                  controller: _dobController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your date of birth";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 15),
-                AppPasswordField(
-                  hint: 'Re-enter password',
-                  controller: _confirmPasswordController,
+                AppTextField(
+                  hint: 'Phone Number',
+                  controller: _phoneNumberController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your phone number";
+                    }
+                    return null;
+                  },
                 ),
+                const SizedBox(height: 15),
                 if (widget.role == "Doctor") ...[
                   const SizedBox(height: 15),
                   AppTextField(
@@ -271,7 +311,7 @@ class _AppSignupState extends State<AppSignup> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                AppButton(onPressed: _validateForm, hintText: "Sign Up"),
+                AppButton(onPressed: submitForm, hintText: "Sign Up"),
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:swastify/provider/login_provider.dart';
@@ -68,3 +69,24 @@ Future<http.Response> verifyUser({
 
   return response;
 }
+
+// Future<http.Response> migrateDbWithUser({
+//   required String url,
+//   required Map<String, dynamic> body,
+//   required LoginProvider loginProvider,
+// }) async {
+//   final token = loginProvider.token;
+
+//   if (token == null || token.isEmpty) {
+//     throw Exception("No auth token found. Please login first.");
+//   }
+
+//   final response = await http.post(
+//     Uri.parse(url),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': 'Bearer $token',
+//     },
+//     body: jsonEncode(body),
+//   );
+// }

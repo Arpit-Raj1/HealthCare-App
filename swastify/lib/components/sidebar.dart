@@ -58,13 +58,21 @@ class _SideBarState extends State<SideBar> {
         );
         Navigator.pushNamed(context, AppRoutes.reports);
         break;
+      case 3:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.medicineAlerts,
+          (route) => false,
+        );
+        Navigator.pushNamed(context, AppRoutes.maps);
+        break;
       case 4:
         Navigator.pushNamedAndRemoveUntil(
           context,
           AppRoutes.medicineAlerts,
           (route) => false,
         );
-        Navigator.pushReplacementNamed(context, AppRoutes.chatPage);
+        Navigator.pushNamed(context, AppRoutes.chatPage);
         break;
       case 5:
         Navigator.pushNamedAndRemoveUntil(
@@ -74,7 +82,7 @@ class _SideBarState extends State<SideBar> {
         );
         break;
       case 6:
-        Navigator.pushReplacementNamed(context, AppRoutes.profile);
+        Navigator.pushNamed(context, AppRoutes.profile);
         break;
     }
   }

@@ -6,6 +6,7 @@ import 'package:swastify/config/app_strings.dart';
 import 'package:swastify/services/contacts_services.dart';
 import 'package:swastify/styles/app_colors.dart';
 import 'package:swastify/styles/app_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum ProfileMenu { call, edit, delete }
 
@@ -205,6 +206,15 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
     );
   }
 
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri url = Uri.parse('tel:$phoneNumber');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget? emptyBody;
@@ -263,6 +273,8 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                         onTap: () {
                           if (selectedIndexes.isNotEmpty) {
                             _toggleSelection(index);
+                          } else {
+                            // _makePhoneCall(filteredContacts[index]['phone']!);
                           }
                         },
                         tileColor: isSelected ? Colors.blue.shade100 : null,
