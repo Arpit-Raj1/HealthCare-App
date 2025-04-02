@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(scaffoldBackgroundColor: AppColors.background),
           initialRoute:
               loginProvider.isLoggedIn
-                  ? AppRoutes.login
-                  : AppRoutes.medicineAlerts,
+                  ? AppRoutes.medicineAlerts
+                  : AppRoutes.login,
           onGenerateRoute: AppRoutes.generateRoute,
           debugShowCheckedModeBanner: false,
         );

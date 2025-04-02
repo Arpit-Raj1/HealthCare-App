@@ -1,3 +1,12 @@
+import java.util.*
+
+val envFile = rootProject.file(".env")
+val envProps = Properties()
+
+if (envFile.exists()) {
+    envFile.inputStream().use { envProps.load(it) }
+}
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -30,6 +39,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        resValue("string", "google_maps_key", "\"${envProps["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
     }
 
     buildTypes {

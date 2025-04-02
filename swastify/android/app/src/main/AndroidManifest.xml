@@ -3,18 +3,13 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
     <application
         android:label="swastify"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="default_channel_id"/>
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAq_OH_2Fx_p4KUJTUox5hbJeoWSjhc6hY" />
 
         <activity
             android:name=".MainActivity"
@@ -43,6 +38,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel_id"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
     <!-- Queries should be placed outside the <application> tag -->

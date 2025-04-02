@@ -127,7 +127,6 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       const SizedBox(height: 15),
-
                       ActionWithButton(
                         fileLoc: "assets/images/google_logo.png",
                         provider: "Google",

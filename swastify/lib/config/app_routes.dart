@@ -44,7 +44,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => AppSignup(role: args['role']));
 
       case maps:
-        return MaterialPageRoute(builder: (_) => MapsPage());
+        return MaterialPageRoute(builder: (_) => MapPage());
 
       case emergency:
         return MaterialPageRoute(builder: (_) => EmergencyContactsScreen());
