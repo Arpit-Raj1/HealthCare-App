@@ -154,18 +154,22 @@ class _LoginPageState extends State<LoginPage> {
 
                             // not a new user
                             if (response.statusCode == 202) {
+                              print("To Medicines");
                               Navigator.of(
                                 context,
                               ).pushReplacementNamed(AppRoutes.medicineAlerts);
                             }
                             // new user
                             else if (response.statusCode == 201) {
+                              print("To signup");
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => SignupOptions(),
                                 ),
                               );
                             } else {
+                              print(response.statusCode);
+                              print(response);
                               loginProvider.clearToken();
                               throw Exception();
                             }

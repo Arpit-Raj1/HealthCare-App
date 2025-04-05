@@ -1,4 +1,6 @@
 import java.util.*
+import java.util.Properties
+import java.io.FileInputStream
 
 val envFile = rootProject.file(".env")
 val envProps = Properties()
@@ -6,6 +8,15 @@ val envProps = Properties()
 if (envFile.exists()) {
     envFile.inputStream().use { envProps.load(it) }
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val MAPS_API_KEY: String? = localProperties.getProperty("MAPS_API_KEY")
+
 
 plugins {
     id("com.android.application")
@@ -40,7 +51,8 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        resValue("string", "google_maps_key", "\"${envProps["GOOGLE_MAPS_API_KEY"] ?: ""}\"")
+        val key = MAPS_API_KEY ?: throw GradleException("MAPS_API_KEY not found in local.properties")
+        resValue("string", "google_maps_key", key)
     }
 
     buildTypes {

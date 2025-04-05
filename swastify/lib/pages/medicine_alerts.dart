@@ -155,26 +155,44 @@ class _MedicineAlertsScreenState extends State<MedicineAlertsScreen> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Spacer(),
-          SizedBox(height: 16),
-          Text(
-            AppStrings.addMedicineAlerts,
-            style: AppText.header1.copyWith(
-              fontWeight: FontWeight.w400,
-              color: AppColors.greyText,
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Spacer(),
+        SizedBox(height: 16),
+        Text(
+          AppStrings.addMedicineAlerts,
+          style: AppText.header1.copyWith(
+            fontWeight: FontWeight.w400,
+            color: AppColors.greyText,
           ),
-          Spacer(),
-          _addButton(context),
-        ],
-      ),
+        ),
+        Spacer(),
+        _addButton(context),
+      ],
     );
   }
+  // return Expanded(
+  //     child: Column(
+  //       children: [
+  //         Spacer(),
+  //         SizedBox(height: 16),
+  //         Text(
+  //           AppStrings.addMedicineAlerts,
+  //           style: AppText.header1.copyWith(
+  //             fontWeight: FontWeight.w400,
+  //             color: AppColors.greyText,
+  //           ),
+  //         ),
+  //         Spacer(),
+  //         _addButton(context),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMedicineList() {
+    print("ok1");
     return Column(
       children: [
         CustomSearchBar(
