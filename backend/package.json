@@ -6,7 +6,6 @@
     "type": "module",
     "license": "ISC",
     "main": "app.js",
-    "type": "module",
     "devDependencies": {
         "prisma": "^6.5.0"
     },
@@ -21,7 +20,8 @@
         "sow-seeds": "prisma db seed",
         "start": "node app.js",
         "sync-db->prisma": "prisma db pull",
-        "sync-prisma->db": "prisma db push"
+        "sync-prisma->db": "prisma db push",
+        "vercel-build": "prisma generate"
     },
     "dependencies": {
         "@prisma/client": "^6.5.0",
