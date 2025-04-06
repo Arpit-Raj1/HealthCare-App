@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swastify/components/app_signup.dart';
 import 'package:swastify/pages/chat_page.dart';
+import 'package:swastify/pages/chatbot_page.dart';
 import 'package:swastify/pages/emergency_contacts_page.dart';
 import 'package:swastify/pages/login_page.dart';
 import 'package:swastify/pages/map_page.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const reports = '/reports';
   static const maps = '/maps';
   static const messagingPage = '/messagingPage';
+  static const chatbot = "/chatbot";
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case login:
@@ -26,6 +28,9 @@ class AppRoutes {
 
       case chatPage:
         return MaterialPageRoute(builder: (_) => MessagesScreen());
+
+      case chatbot:
+        return MaterialPageRoute(builder: (_) => GeminiChatApp());
 
       case medicineAlerts:
         return MaterialPageRoute(builder: (_) => MedicineAlertsScreen());

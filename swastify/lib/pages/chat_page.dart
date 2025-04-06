@@ -147,7 +147,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 GestureDetector(
                   onLongPress: _showTooltip,
                   child: FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed(AppRoutes.chatbot);
+                    },
                     backgroundColor: Colors.blue[100],
                     child: Icon(Icons.chat),
                     shape: CircleBorder(),
