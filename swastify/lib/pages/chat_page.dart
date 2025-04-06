@@ -30,68 +30,131 @@ class MessagesScreen extends StatefulWidget {
 
 class _MessagesScreenState extends State<MessagesScreen> {
   int _selectedIndex = 0;
+  bool _showHelpText = false;
+
+  void _showTooltip() {
+    setState(() {
+      _showHelpText = true;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _showHelpText = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Appbar(title: AppStrings.messages),
       drawer: SideBar(selectedIndex: 4),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: AppColors.greyText),
-                hintText: AppStrings.search,
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search, color: AppColors.greyText),
+                    hintText: AppStrings.search,
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.messagingPage);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.background,
-                    padding: EdgeInsets.all(14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              Expanded(
+                child: ListView(
+                  children: [
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamed(AppRoutes.messagingPage);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.background,
+                        padding: EdgeInsets.all(14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: MessageTile(
+                        name: "Haley James",
+                        message: "Hi, hello",
+                        unreadMessages: 0,
+                      ),
                     ),
-                  ),
-                  child: MessageTile(
-                    name: "Haley James",
-                    message: "Hi, hello",
-                    unreadMessages: 0,
-                  ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamed(AppRoutes.messagingPage);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.background,
+                        padding: EdgeInsets.all(14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: MessageTile(
+                        name: "Antwon Taylor",
+                        message: "Meet me at the Rivercourt",
+                        unreadMessages: 0,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.messagingPage);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.background,
-                    padding: EdgeInsets.all(14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              ),
+            ],
+          ),
+
+          // Floating Help Button and Tooltip
+          Positioned(
+            bottom: 20,
+            right: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (_showHelpText)
+                  Container(
+                    margin: EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      "Want some help?",
+                      style: TextStyle(
+                        color: AppColors.buttonText,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                  child: MessageTile(
-                    name: "Antwon Taylor",
-                    message: "Meet me at the Rivercourt",
-                    unreadMessages: 0,
+                GestureDetector(
+                  onLongPress: _showTooltip,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed(AppRoutes.chatbot);
+                    },
+                    backgroundColor: Colors.blue[100],
+                    child: Icon(Icons.chat),
+                    shape: CircleBorder(),
                   ),
                 ),
               ],

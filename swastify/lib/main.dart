@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           initialRoute:
               loginProvider.isLoggedIn
                   ? AppRoutes.medicineAlerts
-                  : AppRoutes.login,
+                  : AppRoutes.medicineAlerts,
           onGenerateRoute: AppRoutes.generateRoute,
           debugShowCheckedModeBanner: false,
         );
