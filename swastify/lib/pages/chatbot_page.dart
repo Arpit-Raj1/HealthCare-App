@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:swastify/config/env.dart';
 
 void main() {
   runApp(GeminiChatApp());
@@ -41,7 +42,7 @@ class _ChatBotState extends State<ChatBot> {
     try {
       final response = await http.post(
         Uri.parse(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDx9OBeZmEC3R1NSSGF1T7XtXI-77kUXg8",
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_KEY",
         ),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
